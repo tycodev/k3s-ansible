@@ -172,6 +172,7 @@
         {% endif %}
         --helm-set k8sServiceHost="127.0.0.1"
         --helm-set k8sServicePort="6444"
+        --helm-set l2announcements.enabled={{ cilium_l2_annoucements | default("false") }}
         --helm-set routingMode={{ cilium_mode | default("native") }}
         --helm-set autoDirectNodeRoutes={{ "true" if cilium_mode == "native" else "false" }}
         --helm-set kubeProxyReplacement={{ kube_proxy_replacement | default("true") }}
@@ -221,7 +222,6 @@
     - name: Configure Cilium BGP
       when: cilium_bgp
       block:
-
         - name: Copy BGP manifests to first master
           ansible.builtin.template:
             src: "cilium.crs.j2"
@@ -251,3 +251,9 @@
           changed_when: false
           loop_control:
             label: "{{ item }}"
+
+        - name: Test for L2 Announcment resources
+          when: cilium_l2_annoucements
+          ansible.builtin.command:
+            cmd: k3s kubectl get CiliumL2AnnouncementPolicy.cilium.io
+          changed_when: false

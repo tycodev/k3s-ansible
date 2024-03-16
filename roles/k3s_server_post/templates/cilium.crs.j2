@@ -27,3 +27,15 @@ metadata:
 spec:
   cidrs:
   - cidr: "{{ cilium_bgp_lb_cidr }}"
+{% if cilium_l2_annoucements %}
+---
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: 01-l2-annoucement
+spec:
+  interfaces:
+  - {{ cilium_iface }}
+  externalIPs: true
+  loadBalancerIPs: true
+{% endif %}
