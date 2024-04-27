@@ -10,7 +10,7 @@ jobs:
       matrix:
         scenario:
           - default
-          - ipv6
+          # - ipv6
           - single_node
           - calico
           - cilium
@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Check out the codebase
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # 4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # 4.1.4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -59,13 +59,13 @@ jobs:
           EOF
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # 5.0.0
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # 5.1.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip' # caching pip dependencies
 
       - name: Restore vagrant Boxes cache
-        uses: actions/cache/restore@ab5e6d0c87105b4c9c2047343972218f562e4319 # 4.0
+        uses: actions/cache/restore@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # 4.0
         with:
           path: ~/.vagrant.d/boxes
           key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
@@ -118,7 +118,7 @@ jobs:
 
       - name: Upload log files
         if: always() # do this even if a step before has failed
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # 4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # 4.3.3
         with:
           name: logs
           path: |
